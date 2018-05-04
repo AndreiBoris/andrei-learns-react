@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
-// Need to turn off check for unused vars here since React is required in scope to use JSX
 import React, { Component } from 'react'
-/* eslint-enable */
 import logo from './logo.svg'
 import './App.css'
 
