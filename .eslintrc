@@ -6,6 +6,7 @@
   },
   "parserOptions": {
     "sourceType": "module",
+    "allowImportExportEverywhere": true,
     "ecmaFeatures": {
       "jsx": true
     }
