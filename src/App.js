@@ -3,9 +3,24 @@ import logo from './logo.svg'
 import './App.css'
 
 class Welcome extends Component {
+  componentWillReceiveProps( props ) {
+    console.log( 'componentWillReceiveProps' )
+    console.log( { props } )
+  }
+
+  componentWillUpdate( props ) {
+    console.log( 'componentWillUpdate' )
+    console.log( { props } )
+  }
+
+  componentDidUpdate( props ) {
+    console.log( 'componentDidUpdate' )
+    console.log( { props } )
+  }
+
   render() {
     const { text, toggle } = this.props
-    if (toggle) {
+    if ( toggle ) {
       return <h1 className="App-title">{text}</h1>
     }
     return ''
@@ -20,17 +35,35 @@ class App extends Component {
   //   console.log(moduleA);
   // }
 
+  constructor( props ) {
+    super( props )
+    console.log( 'constructor' )
+  }
+
+  // componentDidCatch( error ) {
+  //   console.log( error )
+  // }
+
+  componentWillMount() {
+    console.log( 'componentWillMount' )
+  }
+
+  componentDidMount() {
+    console.log( 'componentDidMount' )
+  }
+
   state = {
     toggle: true,
   }
 
   toggle = () => {
-    this.setState({
+    this.setState( {
       toggle: !this.state.toggle,
-    })
+    } )
   }
 
   render() {
+    console.log( 'render' )
     return (
       <div className="App">
         <header className="App-header">

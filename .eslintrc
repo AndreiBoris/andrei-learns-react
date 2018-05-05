@@ -1,4 +1,5 @@
 {
+  "parser": "babel-eslint",
   "extends": ["plugin:react/recommended", "airbnb-base"],
   "env": {
     "browser": true,
@@ -15,7 +16,16 @@
     "class-methods-use-this": [
       "error",
       {
-        "exceptMethods": ["render"]
+        "exceptMethods": [
+          "render",
+          "componentWillMount",
+          "componentDidMount",
+          "componentWillReceiveProps",
+          "componentDidUpdate",
+          "componentWillUpdate",
+          "componentWillUnmount",
+          "componentDidCatch"
+        ]
       }
     ],
     "no-underscore-dangle": [
@@ -38,7 +48,7 @@
     "max-len": [
       "error",
       {
-        "code": 160
+        "code": 120
       }
     ]
   }
