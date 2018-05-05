@@ -3,63 +3,24 @@ import logo from './logo.svg'
 import './App.css'
 
 class Welcome extends Component {
-  componentWillReceiveProps( props ) {
-    console.log( 'componentWillReceiveProps' )
-    console.log( { props } )
-  }
-
-  componentWillUpdate( props ) {
-    console.log( 'componentWillUpdate' )
-    console.log( { props } )
-  }
-
-  componentDidUpdate( props ) {
-    console.log( 'componentDidUpdate' )
-    console.log( { props } )
-  }
-
   render() {
-    const { text, toggle } = this.props
-    if ( toggle ) {
-      return <h1 className="App-title">{text}</h1>
-    }
-    return ''
+    const { text } = this.props
+    return <h1 className="App-title">{text}</h1>
   }
 }
 
 class App extends Component {
-  // Dynamic Import code splitting example
-  // async handleClick() {
-  //   const { moduleA } = await import("./moduleA");
-
-  //   console.log(moduleA);
-  // }
-
-  constructor( props ) {
-    super( props )
-    console.log( 'constructor' )
+  submit = () => {
+    console.log( this.text.value )
+    console.log( this.email.value )
   }
 
-  // componentDidCatch( error ) {
-  //   console.log( error )
-  // }
-
-  componentWillMount() {
-    console.log( 'componentWillMount' )
+  createRefText = input => {
+    this.text = input
   }
 
-  componentDidMount() {
-    console.log( 'componentDidMount' )
-  }
-
-  state = {
-    toggle: true,
-  }
-
-  toggle = () => {
-    this.setState( {
-      toggle: !this.state.toggle,
-    } )
+  createRefEmail = input => {
+    this.email = input
   }
 
   render() {
@@ -68,13 +29,14 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <Welcome text="Welcome to Using Props 💃 🙂" toggle={this.state.toggle} />
+          <Welcome text="Welcome to Using Props 💃 🙂" />
         </header>
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        {this.state.toggle && <p>This should show and hide.</p>}
-        <button onClick={this.toggle}>Show / Hide</button>
+        <input type="text" ref={this.createRefText} />
+        <input type="email" ref={this.createRefEmail} />
+        <button onClick={this.submit}>Show Value</button>
       </div>
     )
   }
