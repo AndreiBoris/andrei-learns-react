@@ -61,12 +61,12 @@ class ProductRow extends Component {
 
 class SearchBar extends Component {
   render() {
-    const { searchText, onlyInStock, handleUpdate } = this.props
+    const { filterText, inStockOnly, handleUpdate } = this.props
     return (
       <form action="" className="search-bar">
-        <input type="text" name="searchText" value={searchText} onChange={handleUpdate} placeholder="Search..." />
+        <input type="text" name="filterText" value={filterText} onChange={handleUpdate} placeholder="Search..." />
         <br />
-        <input type="checkbox" name="onlyInStock" checked={onlyInStock} onChange={handleUpdate} id="in-stock-only" />
+        <input type="checkbox" name="inStockOnly" checked={inStockOnly} onChange={handleUpdate} id="in-stock-only" />
         <label htmlFor="in-stock-only">Only show products in stock</label>
       </form>
     )
@@ -105,7 +105,7 @@ const organizeProductsByCategory = products => {
 
 class ProductTable extends Component {
   render() {
-    const { products, searchText, onlyInStock } = this.props
+    const { products, filterText, inStockOnly } = this.props
 
     return (
       <div className="product-table">
@@ -117,10 +117,10 @@ class ProductTable extends Component {
         {organizeProductsByCategory( products ).map( category => {
           const heading = <ProductCategoryRow key={category.category} category={category.category} />
           const productJsx = category.products.map( product => {
-            if ( onlyInStock && !product.stocked ) {
+            if ( inStockOnly && !product.stocked ) {
               return null
             }
-            if ( searchText && !product.name.toLowerCase().includes( searchText.toLowerCase() ) ) {
+            if ( filterText && !product.name.toLowerCase().includes( filterText.toLowerCase() ) ) {
               return null
             }
             return <ProductRow key={product.name} inStock={product.stocked} name={product.name} price={product.price} />
@@ -134,8 +134,8 @@ class ProductTable extends Component {
 
 class FilterableProductTable extends Component {
   state = {
-    searchText: '',
-    onlyInStock: false,
+    filterText: '',
+    inStockOnly: false,
   }
 
   handleUpdate = event => {
@@ -153,14 +153,14 @@ class FilterableProductTable extends Component {
       <main className="filterable-product-table">
         <div className="filterable-product-table__content">
           <SearchBar
-            searchText={this.state.searchText}
-            onlyInStock={this.state.onlyInStock}
+            filterText={this.state.filterText}
+            inStockOnly={this.state.inStockOnly}
             handleUpdate={this.handleUpdate}
           />
           <ProductTable
             products={exampleData}
-            searchText={this.state.searchText}
-            onlyInStock={this.state.onlyInStock}
+            filterText={this.state.filterText}
+            inStockOnly={this.state.inStockOnly}
           />
         </div>
       </main>
