@@ -51,10 +51,15 @@ body {
 }
 
 .search-bar [type="text"] {
-  color: lightgray;
   padding: 5px 3px;
   font-size: 1.6rem;
 }
+.search-bar [type="text"]::-moz-placeholder,
+.search-bar [type="text"]::placeholder,
+.search-bar [type="text"]::-ms-input-placeholder {
+  color: lightgray;
+}
+
 .search-bar input {
   margin-bottom: 5px;
 }

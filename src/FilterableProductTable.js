@@ -61,11 +61,12 @@ class ProductRow extends Component {
 
 class SearchBar extends Component {
   render() {
+    const { searchText, onlyInStock, handleUpdate } = this.props
     return (
       <form action="" className="search-bar">
-        <input type="text" name="search" placeholder="Search..." />
+        <input type="text" name="searchText" value={searchText} onChange={handleUpdate} placeholder="Search..." />
         <br />
-        <input type="checkbox" id="in-stock-only" />
+        <input type="checkbox" name="onlyInStock" checked={onlyInStock} onChange={handleUpdate} id="in-stock-only" />
         <label htmlFor="in-stock-only">Only show products in stock</label>
       </form>
     )
@@ -104,7 +105,7 @@ const organizeProductsByCategory = products => {
 
 class ProductTable extends Component {
   render() {
-    const { products } = this.props
+    const { products, searchText, onlyInStock } = this.props
 
     return (
       <div className="product-table">
@@ -115,9 +116,15 @@ class ProductTable extends Component {
         <div />
         {organizeProductsByCategory( products ).map( category => {
           const heading = <ProductCategoryRow key={category.category} category={category.category} />
-          const productJsx = category.products.map( product => (
-            <ProductRow key={product.name} inStock={product.stocked} name={product.name} price={product.price} />
-          ) )
+          const productJsx = category.products.map( product => {
+            if ( onlyInStock && !product.stocked ) {
+              return null
+            }
+            if ( searchText && !product.name.toLowerCase().includes( searchText.toLowerCase() ) ) {
+              return null
+            }
+            return <ProductRow key={product.name} inStock={product.stocked} name={product.name} price={product.price} />
+          } )
           return [ heading, productJsx ]
         } )}
       </div>
@@ -126,12 +133,35 @@ class ProductTable extends Component {
 }
 
 class FilterableProductTable extends Component {
+  state = {
+    searchText: '',
+    onlyInStock: false,
+  }
+
+  handleUpdate = event => {
+    const { target } = event
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const { name } = target
+
+    this.setState( {
+      [name]: value,
+    } )
+  }
+
   render() {
     return (
       <main className="filterable-product-table">
         <div className="filterable-product-table__content">
-          <SearchBar />
-          <ProductTable products={exampleData} />
+          <SearchBar
+            searchText={this.state.searchText}
+            onlyInStock={this.state.onlyInStock}
+            handleUpdate={this.handleUpdate}
+          />
+          <ProductTable
+            products={exampleData}
+            searchText={this.state.searchText}
+            onlyInStock={this.state.onlyInStock}
+          />
         </div>
       </main>
     )
