@@ -2,7 +2,8 @@
   "movies": [
     {
       "id": 1,
-      "title": "Star Wars"
+      "title": "Star Wars",
+      "desc": "A space movie"
     },
     {
       "id": 2,
