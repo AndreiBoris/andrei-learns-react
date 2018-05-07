@@ -29,6 +29,10 @@ body {
   font-size: large;
 }
 
+.Footer-logo {
+  height: 50px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
