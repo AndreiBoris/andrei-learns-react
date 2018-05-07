@@ -23,7 +23,9 @@ const getDataFromApi = async () =>
 const STORAGE_TIMESTAMP = 'movies-timestamp'
 const STORAGE_MOVIES = 'movies'
 
-function localDataIsExpired( localDataTimestamp, currentTimestamp, hoursAllowed = 24 ) {
+// Compare the localDataTimestamp with the currentTimestamp and determine whether
+// localDataTimestamp is expired based on hoursAllowed
+function localDataIsExpired( localDataTimestamp, currentTimestamp, hoursAllowed = 1 ) {
   const HOURS_CONSIDERED_FRESH = hoursAllowed
   const MS_IN_HOUR = 1000 * 3600
   const ALLOWED_TIME_DELTA = HOURS_CONSIDERED_FRESH * MS_IN_HOUR
@@ -46,18 +48,23 @@ class App extends Component {
     movies: [],
   }
 
-  async grabDataFromApi( currentTimestamp ) {
+  // Grab movies from API and apply currentTimestamp to storage
+  async grabMoviesFromApi( currentTimestamp ) {
     console.log( 'grabbing data from API' )
-    const res = await fetch( moviesEndpoint )
-    const movies = await res.json()
-    const { results } = movies
+    try {
+      const res = await fetch( moviesEndpoint )
+      const movies = await res.json()
+      const { results } = movies
 
-    localStorage.setItem( STORAGE_TIMESTAMP, currentTimestamp )
-    localStorage.setItem( STORAGE_MOVIES, JSON.stringify( results ) )
+      localStorage.setItem( STORAGE_TIMESTAMP, currentTimestamp )
+      localStorage.setItem( STORAGE_MOVIES, JSON.stringify( results ) )
 
-    this.setState( {
-      movies: results,
-    } )
+      this.setState( {
+        movies: results,
+      } )
+    } catch ( e ) {
+      console.log( e )
+    }
   }
 
   async componentDidMount() {
@@ -69,13 +76,13 @@ class App extends Component {
         [ storedMoviesTimestamp, storedMovies ].some( value => value === null ) ||
         localDataIsExpired( storedMoviesTimestamp, currentTimestamp )
       ) {
-        this.grabDataFromApi( currentTimestamp )
+        this.grabMoviesFromApi( currentTimestamp )
         return
       }
 
       const storedMoviesArray = JSON.parse( storedMovies )
       if ( !Array.isArray( storedMoviesArray ) ) {
-        this.grabDataFromApi( currentTimestamp )
+        this.grabMoviesFromApi( currentTimestamp )
         return
       }
 
