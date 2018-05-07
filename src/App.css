@@ -1,3 +1,10 @@
+html {
+  font-size: 10px;
+}
+body {
+  font-size: 1.6rem;
+}
+
 .App {
   text-align: center;
 }
@@ -23,6 +30,57 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.filterable-product-table {
+  display: grid;
+  justify-content: start;
+}
+.filterable-product-table__content {
+  border: 1px solid black;
+  padding: 20px;
+}
+.search-bar {
+  margin-bottom: 10px;
+}
+
+.search-bar [type="text"] {
+  color: lightgray;
+  padding: 5px 3px;
+  font-size: 1.6rem;
+}
+.search-bar input {
+  margin-bottom: 5px;
+}
+
+.product-table__heading {
+  font-weight: bold;
+}
+
+.product-table__row {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+  margin-bottom: 5px;
+}
+.product-table__row *:first-child {
+  width: 40%;
+}
+.product-table__row--category *:first-child {
+  width: 100%;
+}
+
+.product-table__row *:nth-child(2) {
+  width: 60%;
+}
+
+.product-table__row--out-of-stock {
+  color: red;
 }
