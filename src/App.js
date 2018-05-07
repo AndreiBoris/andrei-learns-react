@@ -1,42 +1,35 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import Movie from './Movie'
 
-class Welcome extends Component {
-  render() {
-    const { text } = this.props
-    return <h1 className="App-title">{text}</h1>
-  }
-}
+const movies = [
+  {
+    id: 1,
+    title: 'Star Wars',
+  },
+  {
+    id: 2,
+    title: 'Spider Man',
+  },
+  {
+    id: 3,
+    title: '36th Chamber of Shaolin',
+  },
+  {
+    id: 3,
+    title: '5 Deadly Venoms',
+  },
+]
 
 class App extends Component {
-  submit = () => {
-    console.log( this.text.value )
-    console.log( this.email.value )
-  }
-
-  createRefText = input => {
-    this.text = input
-  }
-
-  createRefEmail = input => {
-    this.email = input
-  }
-
   render() {
-    console.log( 'render' )
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <Welcome text="Welcome to Using Props 💃 🙂" />
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <input type="text" ref={this.createRefText} />
-        <input type="email" ref={this.createRefEmail} />
-        <button onClick={this.submit}>Show Value</button>
+        {movies.map( movie => <Movie key={movie.id} movie={movie} /> )}
       </div>
     )
   }
