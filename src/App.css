@@ -38,7 +38,7 @@ body {
   }
 }
 
-.filterable-product-table {
+/* .filterable-product-table {
   display: grid;
   justify-content: start;
 }
@@ -88,4 +88,4 @@ body {
 
 .product-table__row--out-of-stock {
   color: red;
-}
+} */
