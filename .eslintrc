@@ -1,6 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": ["plugin:react/recommended", "airbnb-base"],
+  "plugins": ["json"],
   "env": {
     "browser": true,
     "node": false
