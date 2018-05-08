@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import tmdb from './tmdb.svg';
 import './App.css';
 import MoviesList from './MoviesList';
-import MovieSingle from './MovieSingle';
+import MovieDetail from './MovieDetail';
 
 const App = () => (
   <Router>
@@ -17,7 +17,7 @@ const App = () => (
       </header>
       <Switch>
         <Route exact path="/" component={MoviesList} />
-        <Route path="/:id" component={MovieSingle} />
+        <Route path="/:id" component={MovieDetail} />
       </Switch>
       <footer>
         <img src={tmdb} alt="The Movie Database Logo" className="Footer-logo" />
