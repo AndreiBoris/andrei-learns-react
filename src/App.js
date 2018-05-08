@@ -5,22 +5,19 @@ import logo from './logo.svg';
 import tmdb from './tmdb.svg';
 import './App.css';
 import MoviesList from './MoviesList';
-
-const Test = ({ match }) => <div>{match.params.id}</div>;
+import MovieSingle from './MovieSingle';
 
 const App = () => (
   <Router>
     <div className="App">
       <header className="App-header">
-        {/* eslint-disable jsx-a11y/anchor-is-valid */}
         <Link to="/">
-          {/* eslint-enable */}
           <img src={logo} className="App-logo" alt="logo" />
         </Link>
       </header>
       <Switch>
         <Route exact path="/" component={MoviesList} />
-        <Route path="/:id" component={Test} />
+        <Route path="/:id" component={MovieSingle} />
       </Switch>
       <footer>
         <img src={tmdb} alt="The Movie Database Logo" className="Footer-logo" />
