@@ -31,6 +31,8 @@ function getStoredMovies() {
   if (moviesString === null) {
     return null;
   }
+
+  // TODO: Do this safely.
   const moviesArray = JSON.parse(moviesString);
   if (!Array.isArray(moviesArray)) {
     return null;
