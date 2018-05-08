@@ -1,20 +1,33 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+
 import logo from './logo.svg';
 import tmdb from './tmdb.svg';
 import './App.css';
 import MoviesList from './MoviesList';
 
+const Test = ({ match }) => <div>{match.params.id}</div>;
+
 const App = () => (
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-    </header>
-    <MoviesList />
-    <footer>
-      <img src={tmdb} alt="The Movie Database Logo" className="Footer-logo" />
-      This product uses the TMDb API but is not endorsed or certified by TMDb.
-    </footer>
-  </div>
+  <Router>
+    <div className="App">
+      <header className="App-header">
+        {/* eslint-disable jsx-a11y/anchor-is-valid */}
+        <Link to="/">
+          {/* eslint-enable */}
+          <img src={logo} className="App-logo" alt="logo" />
+        </Link>
+      </header>
+      <Switch>
+        <Route exact path="/" component={MoviesList} />
+        <Route path="/:id" component={Test} />
+      </Switch>
+      <footer>
+        <img src={tmdb} alt="The Movie Database Logo" className="Footer-logo" />
+        This product uses the TMDb API but is not endorsed or certified by TMDb.
+      </footer>
+    </div>
+  </Router>
 );
 
 export default App;
