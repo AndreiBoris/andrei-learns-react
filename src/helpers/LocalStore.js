@@ -1,8 +1,10 @@
 // Movies List
-const STORAGE_TIMESTAMP = 'movies-timestamp';
+const STORAGE_TIMESTAMP_MOVIES = 'movies-timestamp';
 const STORAGE_MOVIES = 'movies';
 
 // Individual Movies
+const STORAGE_TIMESTAMP_DETAIL_PREFIX = 'movie-timestamp-';
+const STORAGE_DETAIL_PREFIX = 'movie-';
 
 const localStorage = window.localStorage || {};
 
@@ -40,13 +42,36 @@ function getStoredMovies() {
   return moviesArray;
 }
 
+function getStoredDetail(id) {
+  const detailString = localStorage.getItem(`${STORAGE_DETAIL_PREFIX}${id}`);
+  if (detailString === null) {
+    return null;
+  }
+
+  // TODO: Do this safely.
+  const detail = JSON.parse(detailString);
+  if (!(detail !== null && typeof detail === 'object')) {
+    return null;
+  }
+  return detail;
+}
+
 function storeMovies(movies, timestamp) {
   localStorage.setItem(STORAGE_MOVIES, JSON.stringify(movies));
-  localStorage.setItem(STORAGE_TIMESTAMP, timestamp);
+  localStorage.setItem(STORAGE_TIMESTAMP_MOVIES, timestamp);
+}
+
+function storeDetail(detail, id, timestamp) {
+  localStorage.setItem(`${STORAGE_DETAIL_PREFIX}${id}`, JSON.stringify(detail));
+  localStorage.setItem(`${STORAGE_TIMESTAMP_DETAIL_PREFIX}${id}`, timestamp);
 }
 
 function getStoredMoviesTimestamp() {
-  return parseFloat(localStorage.getItem(STORAGE_TIMESTAMP));
+  return parseFloat(localStorage.getItem(STORAGE_TIMESTAMP_MOVIES));
+}
+
+function getStoredDetailTimestamp(id) {
+  return parseFloat(localStorage.getItem(`${STORAGE_TIMESTAMP_DETAIL_PREFIX}${id}`));
 }
 
 function createTimestamp() {
@@ -59,4 +84,7 @@ export default {
   getStoredMoviesTimestamp,
   createTimestamp,
   storeMovies,
+  getStoredDetail,
+  storeDetail,
+  getStoredDetailTimestamp,
 };
