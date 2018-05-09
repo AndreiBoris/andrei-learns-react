@@ -7,6 +7,9 @@ import LocalStore from './helpers/LocalStore';
 import MoviesApi from './helpers/MoviesApi';
 // import Movie from './Movie'
 
+const POSTER_PATH = 'http://image.tmdb.org/t/p/w154';
+const BACKDROP_PATH = 'http://image.tmdb.org/t/p/w1280';
+
 class MovieDetail extends Component {
   state = {
     detail: {},
@@ -40,7 +43,15 @@ class MovieDetail extends Component {
   render() {
     const { detail } = this.state;
 
-    return <div>{detail.title}</div>;
+    return (
+      <div>
+        <img src={`${BACKDROP_PATH}${detail.backdrop_path}`} alt={detail.title} />
+        <img src={`${POSTER_PATH}${detail.poster_path}`} alt={detail.title} />
+        <h1>{detail.title}</h1>
+        <h3>{detail.release_date}</h3>
+        <p>{detail.overview}</p>
+      </div>
+    );
   }
 }
 
