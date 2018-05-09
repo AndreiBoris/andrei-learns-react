@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
 import styled from 'styled-components';
+import Overdrive from 'react-overdrive';
 
 import LocalStore from './helpers/LocalStore';
 import MoviesApi from './helpers/MoviesApi';
@@ -15,7 +16,7 @@ const BACKDROP_PATH = 'http://image.tmdb.org/t/p/w1280';
 
 class MovieDetail extends Component {
   state = {
-    detail: {},
+    movie: {},
   };
 
   async componentDidMount() {
@@ -24,19 +25,19 @@ class MovieDetail extends Component {
     try {
       const currentTimestamp = LocalStore.createTimestamp();
       const storedDetailTimestamp = LocalStore.getStoredDetailTimestamp(id);
-      let detail = LocalStore.getStoredDetail(id);
+      let movie = LocalStore.getStoredDetail(id);
 
       // Check if the stored data is absent or expired, if so, request new data and store it
       if (
-        isEmpty(detail) ||
+        isEmpty(movie) ||
         LocalStore.localDataIsExpired(storedDetailTimestamp, currentTimestamp)
       ) {
-        detail = await MoviesApi.getDetail(id);
-        LocalStore.storeDetail(detail, id, currentTimestamp);
+        movie = await MoviesApi.getDetail(id);
+        LocalStore.storeDetail(movie, id, currentTimestamp);
       }
 
       this.setState({
-        detail,
+        movie,
       });
     } catch (e) {
       console.log(e); // eslint-disable-line no-console
@@ -44,16 +45,22 @@ class MovieDetail extends Component {
   }
 
   render() {
-    const { detail } = this.state;
+    const { movie } = this.state;
+
+    if (isEmpty(movie)) {
+      return null;
+    }
 
     return (
-      <MovieWrapper backdrop={`${BACKDROP_PATH}${detail.backdrop_path}`}>
+      <MovieWrapper backdrop={`${BACKDROP_PATH}${movie.backdrop_path}`}>
         <MovieInfo>
-          <Poster src={`${POSTER_PATH}${detail.poster_path}`} alt={detail.title} />
+          <Overdrive id={`${movie.id}`}>
+            <Poster src={`${POSTER_PATH}${movie.poster_path}`} alt={movie.title} />
+          </Overdrive>
           <div>
-            <h1>{detail.title}</h1>
-            <h3>{detail.release_date}</h3>
-            <p>{detail.overview}</p>
+            <h1>{movie.title}</h1>
+            <h3>{movie.release_date}</h3>
+            <p>{movie.overview}</p>
           </div>
         </MovieInfo>
       </MovieWrapper>
