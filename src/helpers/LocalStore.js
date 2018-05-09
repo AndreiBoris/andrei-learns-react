@@ -8,6 +8,8 @@ const STORAGE_DETAIL_PREFIX = 'movie-';
 
 const localStorage = window.localStorage || {};
 
+// TODO: Should modify to only store what we need to be mindful of storage space
+
 // Compare the localDataTimestamp with the currentTimestamp and determine whether
 // localDataTimestamp is expired based on hoursAllowed
 function localDataIsExpired(localDataTimestamp, currentTimestamp, hoursAllowed = 1) {

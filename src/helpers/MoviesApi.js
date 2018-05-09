@@ -7,35 +7,37 @@ const moviesListEndpoint = () =>
   `${movieApiDomain}${moviesListRoute}?api_key=${moviesApiKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`;
 
 const moviesDetailEndpoint = id =>
-  `${movieApiDomain}${moviesDetailRoute}${id}?api_key=${moviesApiKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`;
+  `${movieApiDomain}${moviesDetailRoute}${id}?api_key=${moviesApiKey}&language=en-US`;
+
+const logErrors = (fn, onErrorOutput) =>
+  function logErrorsWrapper(...theArgs) {
+    return fn(...theArgs).catch((error) => {
+      console.log(error); // eslint-disable-line no-console
+      return onErrorOutput;
+    });
+  };
 
 // Grab movies from API and apply currentTimestamp to storage
-const getList = async () => {
+const getListHelper = async () => {
   console.log('grabbing movie list from API'); // eslint-disable-line no-console
-  try {
-    const res = await fetch(moviesListEndpoint());
-    const movies = await res.json();
-    const { results } = movies;
+  const res = await fetch(moviesListEndpoint());
+  const movies = await res.json();
+  const { results } = movies;
 
-    return results;
-  } catch (e) {
-    console.log(e); // eslint-disable-line no-console
-    return [];
-  }
+  return results;
 };
 
-const getDetail = async (id) => {
+const getList = logErrors(getListHelper, []);
+
+const getDetailHelper = async (id) => {
   console.log('grabbing movie detail from API'); // eslint-disable-line no-console
-  try {
-    const res = await fetch(moviesDetailEndpoint(id));
-    const movieDetails = await res.json();
+  const res = await fetch(moviesDetailEndpoint(id));
+  const movieDetails = await res.json();
 
-    return movieDetails;
-  } catch (e) {
-    console.log(e); // eslint-disable-line no-console
-    return {};
-  }
+  return movieDetails;
 };
+
+const getDetail = logErrors(getDetailHelper, {});
 
 export default {
   getList,

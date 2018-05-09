@@ -1,6 +1,7 @@
 /* eslint react/no-did-mount-set-state: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
 
 import LocalStore from './helpers/LocalStore';
 import MoviesApi from './helpers/MoviesApi';
@@ -21,7 +22,7 @@ class MovieDetail extends Component {
 
       // Check if the stored data is absent or expired, if so, request new data and store it
       if (
-        [storedDetailTimestamp, detail].some(value => value === null) ||
+        isEmpty(detail) ||
         LocalStore.localDataIsExpired(storedDetailTimestamp, currentTimestamp)
       ) {
         detail = await MoviesApi.getDetail(id);
