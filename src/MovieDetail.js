@@ -22,26 +22,19 @@ class MovieDetail extends Component {
   async componentDidMount() {
     const { match } = this.props;
     const { id } = match.params;
-    try {
-      const currentTimestamp = LocalStore.createTimestamp();
-      const storedDetailTimestamp = LocalStore.getStoredDetailTimestamp(id);
-      let movie = LocalStore.getStoredDetail(id);
+    const currentTimestamp = LocalStore.createTimestamp();
+    const storedDetailTimestamp = LocalStore.getStoredDetailTimestamp(id);
+    let movie = LocalStore.getStoredDetail(id);
 
-      // Check if the stored data is absent or expired, if so, request new data and store it
-      if (
-        isEmpty(movie) ||
-        LocalStore.localDataIsExpired(storedDetailTimestamp, currentTimestamp)
-      ) {
-        movie = await MoviesApi.getDetail(id);
-        LocalStore.storeDetail(movie, id, currentTimestamp);
-      }
-
-      this.setState({
-        movie,
-      });
-    } catch (e) {
-      console.log(e); // eslint-disable-line no-console
+    // Check if the stored data is absent or expired, if so, request new data and store it
+    if (isEmpty(movie) || LocalStore.localDataIsExpired(storedDetailTimestamp, currentTimestamp)) {
+      movie = await MoviesApi.getDetail(id);
+      LocalStore.storeDetail(movie, id, currentTimestamp);
     }
+
+    this.setState({
+      movie,
+    });
   }
 
   render() {

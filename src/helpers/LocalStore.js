@@ -36,8 +36,13 @@ function getStoredMovies() {
     return null;
   }
 
-  // TODO: Do this safely.
-  const moviesArray = JSON.parse(moviesString);
+  let moviesArray = null;
+  try {
+    moviesArray = JSON.parse(moviesString);
+  } catch (e) {
+    // TODO: Need to do better here and report the error.
+    moviesArray = null;
+  }
   if (!Array.isArray(moviesArray)) {
     return null;
   }
@@ -50,8 +55,14 @@ function getStoredDetail(id) {
     return null;
   }
 
-  // TODO: Do this safely.
-  const detail = JSON.parse(detailString);
+  let detail = null;
+  try {
+    detail = JSON.parse(detailString);
+  } catch (e) {
+    // TODO: Need to do better here and report the error.
+    detail = null;
+  }
+
   if (!(detail !== null && typeof detail === 'object')) {
     return null;
   }

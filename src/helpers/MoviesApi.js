@@ -1,3 +1,5 @@
+import ExtendableError from '../handlers/ExtendableError';
+
 const movieApiDomain = 'https://api.themoviedb.org/3/';
 const moviesApiKey = process.env.REACT_APP_MOVIE_API_KEY;
 const moviesListRoute = 'discover/movie';
@@ -9,16 +11,14 @@ const moviesListEndpoint = () =>
 const moviesDetailEndpoint = id =>
   `${movieApiDomain}${moviesDetailRoute}${id}?api_key=${moviesApiKey}&language=en-US`;
 
-const logErrors = (fn, onErrorOutput) =>
-  function logErrorsWrapper(...theArgs) {
-    return fn(...theArgs).catch((error) => {
-      console.log(error); // eslint-disable-line no-console
-      return onErrorOutput;
-    });
-  };
+class UnauthorizedError extends ExtendableError {
+  constructor(message = 'Must provide an API key.') {
+    super(message);
+  }
+}
 
 // Grab movies from API and apply currentTimestamp to storage
-const getListHelper = async () => {
+const getList = async () => {
   console.log('grabbing movie list from API'); // eslint-disable-line no-console
   const res = await fetch(moviesListEndpoint());
   const movies = await res.json();
@@ -27,17 +27,18 @@ const getListHelper = async () => {
   return results;
 };
 
-const getList = logErrors(getListHelper, []);
-
-const getDetailHelper = async (id) => {
+const getDetail = async (id) => {
   console.log('grabbing movie detail from API'); // eslint-disable-line no-console
   const res = await fetch(moviesDetailEndpoint(id));
+  if (res.status === 401) {
+    throw new UnauthorizedError();
+  }
+  console.log(res);
   const movieDetails = await res.json();
+  console.log(movieDetails);
 
   return movieDetails;
 };
-
-const getDetail = logErrors(getDetailHelper, {});
 
 export default {
   getList,
