@@ -17,35 +17,46 @@ const BACKDROP_PATH = 'http://image.tmdb.org/t/p/w1280';
 class MovieDetail extends Component {
   state = {
     movie: {},
+    error: '',
   };
 
   async componentDidMount() {
     const { match } = this.props;
     const { id } = match.params;
-    try {
-      const currentTimestamp = LocalStore.createTimestamp();
-      const storedDetailTimestamp = LocalStore.getStoredDetailTimestamp(id);
-      let movie = LocalStore.getStoredDetail(id);
-
-      // Check if the stored data is absent or expired, if so, request new data and store it
-      if (
-        isEmpty(movie) ||
-        LocalStore.localDataIsExpired(storedDetailTimestamp, currentTimestamp)
-      ) {
+    const currentTimestamp = LocalStore.createTimestamp();
+    const storedDetailTimestamp = LocalStore.getStoredDetailTimestamp(id);
+    let movie = LocalStore.getStoredDetail(id);
+    // Check if the stored data is absent or expired, if so, request new data and store it
+    if (isEmpty(movie) || LocalStore.localDataIsExpired(storedDetailTimestamp, currentTimestamp)) {
+      try {
         movie = await MoviesApi.getDetail(id);
-        LocalStore.storeDetail(movie, id, currentTimestamp);
+      } catch (e) {
+        if (e instanceof MoviesApi.UnauthorizedError) {
+          // TODO: Should report that we are not authorized to get the movie data.
+          this.setState({
+            error: e.message,
+          });
+        } else {
+          // TODO: Should report on this error by grabbing the stack related to e and sending it to a service
+          this.setState({
+            error: 'An error occured when trying to contact The Movie Database.',
+          });
+        }
+        return;
       }
-
-      this.setState({
-        movie,
-      });
-    } catch (e) {
-      console.log(e); // eslint-disable-line no-console
+      LocalStore.storeDetail(movie, id, currentTimestamp);
     }
+    this.setState({
+      movie,
+    });
   }
 
   render() {
-    const { movie } = this.state;
+    const { movie, error } = this.state;
+
+    if (!isEmpty(error)) {
+      return <p className="movie-api-error">⚠ {error} ⚠</p>;
+    }
 
     if (isEmpty(movie)) {
       return null;

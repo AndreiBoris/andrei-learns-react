@@ -33,6 +33,14 @@ body {
   height: 50px;
   margin-right: 1.5rem;
 }
+
+.error-boundary {
+  color: white;
+}
+
+.movie-api-error {
+  color: white;
+}
 footer {
   display: flex;
   justify-content: center;
