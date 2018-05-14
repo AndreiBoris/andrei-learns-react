@@ -45,6 +45,10 @@ class MoviesList extends Component {
   render() {
     const { movies } = this.state;
 
+    if (!movies) {
+      return null;
+    }
+
     return <MovieGrid>{movies.map(movie => <Movie key={movie.id} movie={movie} />)}</MovieGrid>;
   }
 }
