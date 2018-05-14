@@ -6,6 +6,7 @@ import tmdb from './tmdb.svg';
 import './App.css';
 import MoviesList from './MoviesList';
 import MovieDetail from './MovieDetail';
+import ErrorBoundary from './handlers/ErrorBoundary';
 
 const App = () => (
   <Router>
@@ -15,14 +16,16 @@ const App = () => (
           <img src={logo} className="App-logo" alt="logo" />
         </Link>
       </header>
-      <Switch>
-        <Route exact path="/" component={MoviesList} />
-        <Route path="/:id" component={MovieDetail} />
-      </Switch>
+      <ErrorBoundary>
+        <Switch>
+          <Route exact path="/" component={MoviesList} />
+          <Route path="/:id" component={MovieDetail} />
+        </Switch>
+      </ErrorBoundary>
       <footer>
         <img src={tmdb} alt="The Movie Database Logo" className="Footer-logo" />
         This product uses the TMDb API but is not endorsed or certified by
-        <a target="_blank" href="https://www.themoviedb.org/">
+        <a rel="noopener" href="https://www.themoviedb.org/">
           TMDb
         </a>.
       </footer>
