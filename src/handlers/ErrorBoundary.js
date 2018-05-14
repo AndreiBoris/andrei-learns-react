@@ -9,7 +9,8 @@ class ErrorBoundary extends Component {
     // TODO: Should use the caught error to display a more specific message.
     // Display fallback UI
     this.setState({ hasError: true });
-    // You can also log the error to an error reporting service
+
+    // TODO: Should report the error to an external service for debugging ease.
     // logErrorToMyService(error, info);
   }
 

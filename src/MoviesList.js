@@ -17,33 +17,42 @@ const MovieGrid = styled.div`
 class MoviesList extends Component {
   state = {
     movies: [],
+    error: '',
   };
 
   async componentDidMount() {
-    try {
-      const currentTimestamp = LocalStore.createTimestamp();
-      const storedMoviesTimestamp = LocalStore.getStoredMoviesTimestamp();
-      let movies = LocalStore.getStoredMovies();
-
-      // Check if the stored data is absent or expired, if so, request new data and store it
-      if (
-        isEmpty(movies) ||
-        LocalStore.localDataIsExpired(storedMoviesTimestamp, currentTimestamp)
-      ) {
+    const currentTimestamp = LocalStore.createTimestamp();
+    const storedMoviesTimestamp = LocalStore.getStoredMoviesTimestamp();
+    let movies = LocalStore.getStoredMovies();
+    // Check if the stored data is absent or expired, if so, request new data and store it
+    if (isEmpty(movies) || LocalStore.localDataIsExpired(storedMoviesTimestamp, currentTimestamp)) {
+      try {
         movies = await MoviesApi.getList();
-        LocalStore.storeMovies(movies, currentTimestamp);
+      } catch (e) {
+        console.log('error');
+        if (e instanceof MoviesApi.UnauthorizedError) {
+          // TODO: Should report that we are not authorized to get the movie data.
+          this.setState({
+            error: e.message,
+          });
+        }
+        return;
       }
-
-      this.setState({
-        movies,
-      });
-    } catch (e) {
-      console.log(e); // eslint-disable-line no-console
+      LocalStore.storeMovies(movies, currentTimestamp);
     }
+
+    this.setState({
+      movies,
+      error: '',
+    });
   }
 
   render() {
-    const { movies } = this.state;
+    const { movies, error } = this.state;
+
+    if (!isEmpty(error)) {
+      return <p className="movie-api-error">⚠ {error} ⚠</p>;
+    }
 
     if (!movies) {
       return null;

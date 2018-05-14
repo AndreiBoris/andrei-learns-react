@@ -17,6 +17,7 @@ const BACKDROP_PATH = 'http://image.tmdb.org/t/p/w1280';
 class MovieDetail extends Component {
   state = {
     movie: {},
+    error: '',
   };
 
   async componentDidMount() {
@@ -25,20 +26,32 @@ class MovieDetail extends Component {
     const currentTimestamp = LocalStore.createTimestamp();
     const storedDetailTimestamp = LocalStore.getStoredDetailTimestamp(id);
     let movie = LocalStore.getStoredDetail(id);
-
     // Check if the stored data is absent or expired, if so, request new data and store it
     if (isEmpty(movie) || LocalStore.localDataIsExpired(storedDetailTimestamp, currentTimestamp)) {
-      movie = await MoviesApi.getDetail(id);
+      try {
+        movie = await MoviesApi.getDetail(id);
+      } catch (e) {
+        if (e instanceof MoviesApi.UnauthorizedError) {
+          // TODO: Should report that we are not authorized to get the movie data.
+          this.setState({
+            error: e.message,
+          });
+        }
+        return;
+      }
       LocalStore.storeDetail(movie, id, currentTimestamp);
     }
-
     this.setState({
       movie,
     });
   }
 
   render() {
-    const { movie } = this.state;
+    const { movie, error } = this.state;
+
+    if (!isEmpty(error)) {
+      return <p className="movie-api-error">⚠ {error} ⚠</p>;
+    }
 
     if (isEmpty(movie)) {
       return null;

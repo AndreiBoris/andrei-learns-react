@@ -12,7 +12,9 @@ const moviesDetailEndpoint = id =>
   `${movieApiDomain}${moviesDetailRoute}${id}?api_key=${moviesApiKey}&language=en-US`;
 
 class UnauthorizedError extends ExtendableError {
-  constructor(message = 'Must provide an API key.') {
+  constructor(
+    message = 'An API key must be configured in order to get movies from the movie database.',
+  ) {
     super(message);
   }
 }
@@ -21,6 +23,9 @@ class UnauthorizedError extends ExtendableError {
 const getList = async () => {
   console.log('grabbing movie list from API'); // eslint-disable-line no-console
   const res = await fetch(moviesListEndpoint());
+  if (res.status === 401) {
+    throw new UnauthorizedError();
+  }
   const movies = await res.json();
   const { results } = movies;
 
@@ -33,9 +38,7 @@ const getDetail = async (id) => {
   if (res.status === 401) {
     throw new UnauthorizedError();
   }
-  console.log(res);
   const movieDetails = await res.json();
-  console.log(movieDetails);
 
   return movieDetails;
 };
@@ -43,4 +46,5 @@ const getDetail = async (id) => {
 export default {
   getList,
   getDetail,
+  UnauthorizedError,
 };
