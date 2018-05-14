@@ -29,11 +29,15 @@ class MoviesList extends Component {
       try {
         movies = await MoviesApi.getList();
       } catch (e) {
-        console.log('error');
         if (e instanceof MoviesApi.UnauthorizedError) {
           // TODO: Should report that we are not authorized to get the movie data.
           this.setState({
             error: e.message,
+          });
+        } else {
+          // TODO: Should report on this error by grabbing the stack related to e and sending it to a service
+          this.setState({
+            error: 'An error occured when trying to contact The Movie Database.',
           });
         }
         return;

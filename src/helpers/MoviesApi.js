@@ -26,6 +26,7 @@ const getList = async () => {
   if (res.status === 401) {
     throw new UnauthorizedError();
   }
+
   const movies = await res.json();
   const { results } = movies;
 

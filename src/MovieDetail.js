@@ -36,6 +36,11 @@ class MovieDetail extends Component {
           this.setState({
             error: e.message,
           });
+        } else {
+          // TODO: Should report on this error by grabbing the stack related to e and sending it to a service
+          this.setState({
+            error: 'An error occured when trying to contact The Movie Database.',
+          });
         }
         return;
       }
