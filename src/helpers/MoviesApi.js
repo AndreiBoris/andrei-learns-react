@@ -1,5 +1,5 @@
 const movieApiDomain = 'https://api.themoviedb.org/3/';
-const moviesApiKey = 'a2ad2841c78482e5b35edc0dc31ffd51';
+const moviesApiKey = process.env.REACT_APP_MOVIE_API_KEY;
 const moviesListRoute = 'discover/movie';
 const moviesDetailRoute = 'movie/';
 
