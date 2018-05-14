@@ -21,7 +21,10 @@ const App = () => (
       </Switch>
       <footer>
         <img src={tmdb} alt="The Movie Database Logo" className="Footer-logo" />
-        This product uses the TMDb API but is not endorsed or certified by TMDb.
+        This product uses the TMDb API but is not endorsed or certified by
+        <a target="_blank" href="https://www.themoviedb.org/">
+          TMDb
+        </a>.
       </footer>
     </div>
   </Router>
